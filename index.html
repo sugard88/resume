@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人简历 — 陈梓熙</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    /* ===== CSS Reset & Variables ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --grad-1: #667eea;
+      --grad-2: #764ba2;
+      --grad-3: #f093fb;
+      --grad-4: #f5576c;
+      --accent: #667eea;
+      --accent-light: #a78bfa;
+      --bg: #0f0f1a;
+      --bg-card: #1a1a2e;
+      --bg-card2: #16213e;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(255,255,255,0.08);
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0,0,0,0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== Scrollbar ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--grad-1); border-radius: 3px; }
+
+    /* ===== Navigation ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 14px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* === 毛玻璃核心：blur + 半透明背景 + 细边框 === */
+      background: rgba(15, 15, 26, 0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* 滚动后加深毛玻璃效果 */
+    nav.scrolled {
+      background: rgba(15, 15, 26, 0.88);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .nav-logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      position: relative;
+      color: rgba(226, 232, 240, 0.6);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: color 0.25s ease, background 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover {
+      color: rgba(226, 232, 240, 0.9);
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    /* === Active 高亮 pill（will-tech 风格）=== */
+    .nav-links a.active {
+      color: #fff;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      box-shadow: 0 2px 16px rgba(102, 126, 234, 0.45);
+    }
+
+    /* === 汉堡按钮 === */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      padding: 6px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .nav-hamburger:hover { background: rgba(255,255,255,0.08); }
+
+    .nav-hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: rgba(226, 232, 240, 0.7);
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
+
+    /* 汉堡打开状态 → 变 X */
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* 移动端菜单 */
+    .nav-links.mobile-open {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 65px;
+      left: 16px;
+      right: 16px;
+      background: rgba(15, 15, 26, 0.96);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      gap: 4px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+      animation: slideDown 0.25s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Hero Section ===== */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 20px 40px;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 40%, rgba(102,126,234,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(240,147,251,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 50% 90%, rgba(245,87,108,0.15) 0%, transparent 50%);
+    }
+
+    .hero-orbs {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(102,126,234,0.8) 0%, transparent 70%); top: -150px; left: -120px; animation: float1 10s ease-in-out infinite; }
+    .orb-2 { width: 380px; height: 380px; background: radial-gradient(circle, rgba(240,147,251,0.7) 0%, transparent 70%); top: 10%; right: -100px; animation: float2 12s ease-in-out infinite; }
+    .orb-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(245,87,108,0.6) 0%, transparent 70%); bottom: 0; left: 35%; animation: float3 9s ease-in-out infinite; }
+    .orb-4 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(167,139,250,0.5) 0%, transparent 70%); top: 40%; left: 5%; animation: float4 11s ease-in-out infinite; }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25%  { transform: translate(60px, 40px) scale(1.1); }
+      50%  { transform: translate(20px, 80px) scale(0.95); }
+      75%  { transform: translate(-30px, 30px) scale(1.05); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%  { transform: translate(-50px, -60px) scale(1.08); }
+      66%  { transform: translate(30px, -20px) scale(0.92); }
+    }
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      40%  { transform: translate(-40px, -50px) scale(1.1); }
+      70%  { transform: translate(20px, -30px) scale(0.9); }
+    }
+    @keyframes float4 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(30px, -40px) scale(1.15); }
+    }
+
+    /* 背景光网叠加 — 斜向流动 */
+    .hero-mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent,
+          transparent 40px,
+          rgba(102,126,234,0.03) 40px,
+          rgba(102,126,234,0.03) 41px
+        ),
+        repeating-linear-gradient(
+          55deg,
+          transparent,
+          transparent 40px,
+          rgba(240,147,251,0.02) 40px,
+          rgba(240,147,251,0.02) 41px
+        );
+      animation: mesh-shift 20s linear infinite;
+    }
+
+    @keyframes mesh-shift {
+      from { background-position: 0 0, 0 0; }
+      to   { background-position: 80px 80px, -80px 80px; }
+    }
+
+    /* ===== Hero 文字入场动画 ===== */
+    @keyframes hero-in {
+      from { opacity: 0; transform: translateY(28px); filter: blur(4px); }
+      to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+
+    .hero-tag       { opacity: 0; animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards; }
+    .hero-avatar-wrap { opacity: 0; animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards; }
+    .hero-name       { opacity: 0; animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards; }
+    .hero-title      { opacity: 0; animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards; }
+    .hero-desc       { opacity: 0; animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards; }
+    .hero-contacts   { opacity: 0; animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1.0s forwards; }
+    .hero-cta        { opacity: 0; animation: hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) 1.15s forwards; }
+    .scroll-indicator { opacity: 0; animation: hero-in 0.6s ease 1.5s forwards, bounce 2.2s ease-in-out 1.5s infinite; }
+
+    /* 头像呼吸光晕 */
+    .hero-avatar-wrap {
+      position: relative;
+      display: inline-block;
+    }
+    .hero-avatar-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-3), var(--grad-4));
+      opacity: 0;
+      animation: avatar-glow 2.5s ease-in-out 1.8s infinite;
+      z-index: -1;
+    }
+    @keyframes avatar-glow {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(1.08); }
+    }
+
+    /* 名字文字流光 */
+    .hero-name {
+      background: linear-gradient(
+        105deg,
+        #fff 0%,
+        #fff 30%,
+        var(--accent-light) 50%,
+        #fff 70%,
+        #fff 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards,
+                 shine 4s ease-in-out 2.2s infinite;
+    }
+    @keyframes shine {
+      0%   { background-position: 200% center; }
+      50%  { background-position: 0% center; }
+      100% { background-position: -200% center; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 700px;
+    }
+
+    .hero-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-3));
+      margin: 0 auto 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      border: 3px solid rgba(255,255,255,0.15);
+      box-shadow: 0 0 40px rgba(102,126,234,0.4);
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 100px;
+      background: rgba(102,126,234,0.15);
+      border: 1px solid rgba(102,126,234,0.3);
+      color: var(--accent-light);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-name {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--grad-3) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-bottom: 24px;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto 40px;
+      line-height: 1.8;
+    }
+
+    .hero-contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .contact-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 100px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .contact-chip:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .contact-chip .icon { font-size: 1rem; }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 100px;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(102,126,234,0.4);
+    }
+
+    .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(102,126,234,0.6); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s ease-in-out infinite;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ===== Section Common ===== */
+    section { padding: 100px 20px; }
+
+    .container { max-width: 1000px; margin: 0 auto; }
+
+    .section-label {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 100px;
+      background: rgba(102,126,234,0.12);
+      border: 1px solid rgba(102,126,234,0.25);
+      color: var(--accent-light);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff, var(--text-muted));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 600px;
+      margin-bottom: 60px;
+    }
+
+    /* ===== About Section ===== */
+    #about { background: var(--bg); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .about-text { color: var(--text-muted); font-size: 1rem; line-height: 1.9; }
+    .about-text p + p { margin-top: 16px; }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .stat-card:hover { transform: translateY(-4px); border-color: var(--accent); }
+
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-3));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: block;
+    }
+
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; }
+
+    /* ===== Education Section ===== */
+    #education { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card2) 100%); }
+
+    .timeline { position: relative; padding-left: 32px; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 12px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(180deg, var(--grad-1), var(--grad-3), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      box-shadow: 0 0 12px rgba(102,126,234,0.6);
+    }
+
+    .timeline-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .timeline-card:hover { border-color: rgba(102,126,234,0.4); transform: translateX(4px); }
+
+    .timeline-period {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 100px;
+      background: rgba(102,126,234,0.12);
+      color: var(--accent-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .timeline-school { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .timeline-degree { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 10px; }
+    .timeline-detail { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
+
+    /* ===== Skills Section ===== */
+    #skills { background: var(--bg-card2); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .skill-category {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .skill-category:hover { border-color: rgba(102,126,234,0.4); }
+
+    .skill-cat-icon { font-size: 1.8rem; margin-bottom: 12px; }
+
+    .skill-cat-title { font-size: 1rem; font-weight: 600; margin-bottom: 16px; }
+
+    .skill-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .skill-tag {
+      padding: 5px 14px;
+      border-radius: 100px;
+      background: rgba(102,126,234,0.1);
+      border: 1px solid rgba(102,126,234,0.2);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .skill-tag:hover {
+      background: rgba(102,126,234,0.2);
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    /* ===== Projects Section ===== */
+    #projects { background: var(--bg); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-3));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover { transform: translateY(-6px); border-color: rgba(102,126,234,0.4); }
+    .project-card:hover::before { opacity: 1; }
+
+    /* ===== Projects — 横向滚动模式 ===== */
+    .projects-wrapper {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .projects-header-panel {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 10;
+      padding: 60px 60px 0;
+      background: linear-gradient(to bottom, var(--bg) 70%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .projects-progress-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .progress-dot.done {
+      background: var(--grad-1);
+      width: 28px;
+      border-radius: 4px;
+    }
+
+    .progress-dot.active {
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      transform: scale(1.3);
+    }
+
+    .projects-track {
+      display: flex;
+      height: 100%;
+      width: max-content;  /* 让 track 宽度由内容决定 */
+      /* overflow 由 GSAP 通过 transform 控制 */
+    }
+
+    .project-card {
+      flex-shrink: 0;
+      width: 100vw;
+      height: 100%;
+      scroll-snap-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 80px 80px;
+      border-radius: 0;
+      border: none;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+      margin: 0;
+    }
+
+    .project-card:last-child { border-right: none; }
+
+    .project-card .card-inner {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      max-width: 600px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card .card-inner::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--grad-1), var(--grad-3));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .project-card:hover .card-inner { border-color: rgba(102,126,234,0.4); transform: translateY(-6px); }
+    .project-card:hover .card-inner::before { opacity: 1; }
+
+    /* 退出提示 */
+    .projects-exit-hint {
+      position: fixed;
+      bottom: 30px;
+      right: 40px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+      z-index: 200;
+    }
+    .projects-exit-hint.show { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .project-card { padding: 100px 20px 60px; }
+      .projects-header-panel { padding: 40px 20px 0; }
+      .project-card .card-inner { padding: 24px; }
+    }
+
+    .project-icon { font-size: 2rem; margin-bottom: 16px; }
+    .project-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+    .project-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px; }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .project-tag {
+      padding: 3px 10px;
+      border-radius: 100px;
+      background: rgba(240,147,251,0.1);
+      border: 1px solid rgba(240,147,251,0.2);
+      color: #c084fc;
+      font-size: 0.75rem;
+    }
+
+    /* ===== Awards Section ===== */
+    #awards { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card2) 50%, var(--bg) 100%); }
+
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .award-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+
+    .award-card:hover { border-color: rgba(240,147,251,0.4); transform: translateY(-3px); }
+
+    .award-emoji { font-size: 1.8rem; flex-shrink: 0; margin-top: 2px; }
+
+    .award-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .award-org { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 4px; }
+    .award-year {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      background: rgba(240,147,251,0.1);
+      border: 1px solid rgba(240,147,251,0.2);
+      color: #c084fc;
+      font-size: 0.75rem;
+    }
+
+    /* ===== Research / Publications ===== */
+    #research { background: var(--bg); }
+
+    .pub-list { display: flex; flex-direction: column; gap: 20px; }
+
+    .pub-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      transition: all 0.2s;
+      position: relative;
+      padding-left: 50px;
+    }
+
+    .pub-card::before {
+      content: counter(pub-counter);
+      counter-increment: pub-counter;
+      position: absolute;
+      left: 20px;
+      top: 28px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pub-list { counter-reset: pub-counter; }
+
+    .pub-card:hover { border-color: rgba(102,126,234,0.4); transform: translateX(4px); }
+
+    .pub-title { font-size: 1rem; font-weight: 600; margin-bottom: 8px; line-height: 1.5; }
+    .pub-authors { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 6px; }
+    .pub-venue {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 100px;
+      background: rgba(102,126,234,0.1);
+      border: 1px solid rgba(102,126,234,0.2);
+      color: var(--accent-light);
+      font-size: 0.78rem;
+    }
+
+    /* ===== Contact Section ===== */
+    #contact {
+      background: var(--bg-card2);
+      text-align: center;
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(240,147,251,0.1));
+      border: 1px solid rgba(102,126,234,0.25);
+      border-radius: 24px;
+      padding: 60px 40px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 16px; }
+
+    .contact-subtitle { color: var(--text-muted); margin-bottom: 40px; }
+
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .contact-btn-primary {
+      background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(102,126,234,0.4);
+    }
+
+    .contact-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(102,126,234,0.6); }
+
+    .contact-btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .contact-btn-secondary:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      padding: 32px 20px;
+      background: var(--bg);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a {
+      color: var(--accent-light);
+      text-decoration: none;
+    }
+
+    /* ===== Fade-in animation ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Partners Marquee ===== */
+    .marquee-section {
+      padding: 60px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .marquee-label {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    /* 左右渐变遮罩，伪造无缝感 */
+    .marquee-track-wrapper {
+      position: relative;
+    }
+    .marquee-track-wrapper::before,
+    .marquee-track-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 120px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .marquee-track-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg), transparent);
+    }
+    .marquee-track-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg), transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 20px;
+      width: max-content;
+      animation: marquee-scroll 28s linear infinite;
+    }
+
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    .marquee-card {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      min-width: 180px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+      transition: border-color 0.3s, color 0.3s, box-shadow 0.3s;
+    }
+
+    .marquee-card:hover {
+      border-color: rgba(102, 126, 234, 0.4);
+      color: var(--text);
+      box-shadow: 0 4px 20px rgba(102, 126, 234, 0.15);
+    }
+
+    .marquee-card .mc-icon {
+      font-size: 1.2rem;
+      filter: grayscale(0.3);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .nav-links { gap: 20px; }
+      .nav-links a { font-size: 0.82rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .pub-card { padding-left: 32px; }
+      .pub-card::before { left: 12px; }
+      section { padding: 70px 16px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 14px 20px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .pub-card { padding-left: 32px; }
+      .pub-card::before { left: 12px; }
+      section { padding: 70px 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-name { font-size: 2.2rem; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Navigation ===== -->
+  <nav>
+    <a href="#hero" class="nav-logo">CZX.</a>
+    <ul class="nav-links">
+      <li><a href="#about">关于我</a></li>
+      <li><a href="#education">教育背景</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#projects">项目</a></li>
+      <li><a href="#research">研究</a></li>
+      <li><a href="#awards">荣誉</a></li>
+      <li><a href="#contact">联系我</a></li>
+    </ul>
+    <button class="nav-hamburger" aria-label="打开菜单">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- ===== Hero ===== -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-mesh"></div>
+    <div class="hero-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+    </div>
+    <div class="hero-content">
+      <span class="hero-avatar-wrap"><div class="hero-avatar">👤</div></span>
+      <div class="hero-tag">研究生 · 论文写作中</div>
+      <h1 class="hero-name">陈梓熙</h1>
+      <p class="hero-title">AI方向 · SA · Singapore · NUS</p>
+      <p class="hero-desc">
+        NUS 硕士生，专注于人工智能与数据分析领域，热衷于用实证方法探索技术与金融交叉的前沿问题。
+      </p>
+      <div class="hero-contacts">
+        <a href="mailto:2287070405a@gmail.com" class="contact-chip">
+          <span class="icon">✉️</span> 2287070405a@gmail.com
+        </a>
+        <a href="tel:+86-13510072314" class="contact-chip">
+          <span class="icon">📱</span> 135-1007-2314
+        </a>
+        <span class="contact-chip">
+          <span class="icon">📍</span> 深圳
+        </span>
+      </div>
+      <a href="#contact" class="hero-cta">联系我 →</a>
+    </div>
+    <div class="scroll-indicator">↓</div>
+  </section>
+
+  <!-- ===== About ===== -->
+  <section id="about">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-label">About Me</div>
+        <h2 class="section-title">关于我</h2>
+        <p class="section-desc">一个立体的自我介绍，让别人快速了解你。</p>
+      </div>
+      <div class="about-grid fade-in">
+        <div class="about-text">
+          <p>
+            你好！我是 <strong style="color: var(--text)">陈梓熙</strong>，目前就读于新加坡国立大学（NUS）系统科学院（ISS）系统分析专业（SA），预计 2027 年 8 月毕业。
+          </p>
+          <p>
+            我的研究方向是 <strong style="color: var(--text)">人工智能与数据分析</strong>，
+            核心关注机器学习算法优化、数据驱动决策与金融科技等应用问题，擅长使用 Python / R / SQL 等工具进行实证分析。
+          </p>
+          <p>
+            在学术之外，我对人工智能的前沿应用也抱有浓厚兴趣。业余时间关注技术博客与开源社区，
+            这培养了我系统性思考与快速学习的思维方式。
+          </p>
+          <p>
+            我正在积极寻找 <strong style="color: var(--text)">数据分析 / AI 算法 / 量化研究</strong> 方向的岗位机会，
+            期待与志同道合的团队一起创造价值。
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat-card">
+            <span class="stat-num">2</span>
+            <div class="stat-label">研究学习年数</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">3</span>
+            <div class="stat-label">完成项目数量</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">1</span>
+            <div class="stat-label">论文 / 研究成果</div>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">3</span>
+            <div class="stat-label">荣誉奖项数量</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Partners Marquee ===== -->
+  <section class="marquee-section">
+    <div class="container">
+      <div class="marquee-label">合作与交流</div>
+      <div class="marquee-track-wrapper">
+        <div class="marquee-track">
+          <!-- 第一组 -->
+          <div class="marquee-card"><span class="mc-icon">🎓</span>NUS ISS</div>
+          <div class="marquee-card"><span class="mc-icon">🔬</span>数据科学实验室</div>
+          <div class="marquee-card"><span class="mc-icon">🤖</span>AI 研究组</div>
+          <div class="marquee-card"><span class="mc-icon">📊</span>量化金融中心</div>
+          <div class="marquee-card"><span class="mc-icon">🌏</span>国际交流项目</div>
+          <div class="marquee-card"><span class="mc-icon">📐</span>计量经济实验室</div>
+          <div class="marquee-card"><span class="mc-icon">🧠</span>认知计算中心</div>
+          <div class="marquee-card"><span class="mc-icon">📱</span>智能系统研究院</div>
+          <!-- 第二组（重复，用于无缝拼接） -->
+          <div class="marquee-card"><span class="mc-icon">🎓</span>NUS ISS</div>
+          <div class="marquee-card"><span class="mc-icon">🔬</span>数据科学实验室</div>
+          <div class="marquee-card"><span class="mc-icon">🤖</span>AI 研究组</div>
+          <div class="marquee-card"><span class="mc-icon">📊</span>量化金融中心</div>
+          <div class="marquee-card"><span class="mc-icon">🌏</span>国际交流项目</div>
+          <div class="marquee-card"><span class="mc-icon">📐</span>计量经济实验室</div>
+          <div class="marquee-card"><span class="mc-icon">🧠</span>认知计算中心</div>
+          <div class="marquee-card"><span class="mc-icon">📱</span>智能系统研究院</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Education ===== -->
+  <section id="education">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-label">Education</div>
+        <h2 class="section-title">教育背景</h2>
+        <p class="section-desc">学历经历与学业成就。</p>
+      </div>
+      <div class="timeline fade-in">
+
+        <div class="timeline-item">
+          <div class="timeline-card">
+            <div class="timeline-period">2026.08 — 2027.08（预计）</div>
+            <div class="timeline-school">新加坡国立大学（National University of Singapore）</div>
+            <div class="timeline-degree">硕士 · 系统分析（System Analysis）</div>
+            <div class="timeline-detail">
+              GPA：3.5 / 4.0（前 30%）· 研究方向：AI 与数据分析<br/>
+              主修课程：机器学习、数据挖掘、统计建模、系统分析与设计<br/>
+              导师：吴导师
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-card">
+            <div class="timeline-period">2022.09 — 2026.06</div>
+            <div class="timeline-school">某大学 · 某学院</div>
+            <div class="timeline-degree">学士 · 某专业</div>
+            <div class="timeline-detail">
+              GPA：3.7 / 4.0（前 25%）· 荣誉：校级奖学金<br/>
+              参与学生组织：志愿者协会 · 担任职务：活动策划<br/>
+              毕业论文：《XXXXXXXX》（优秀论文）
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Skills ===== -->
+  <section id="skills">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-label">Skills</div>
+        <h2 class="section-title">专业技能</h2>
+        <p class="section-desc">我掌握的工具、语言与方法论。</p>
+      </div>
+      <div class="skills-grid fade-in">
+        <div class="skill-category">
+          <div class="skill-cat-icon">💻</div>
+          <div class="skill-cat-title">编程语言 & 工具</div>
+          <div class="skill-list">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">R</span>
+            <span class="skill-tag">Stata</span>
+            <span class="skill-tag">MATLAB</span>
+            <span class="skill-tag">SQL</span>
+            <span class="skill-tag">LaTeX</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-icon">📊</div>
+          <div class="skill-cat-title">数据分析 & 建模</div>
+          <div class="skill-list">
+            <span class="skill-tag">面板数据分析</span>
+            <span class="skill-tag">时间序列</span>
+            <span class="skill-tag">机器学习</span>
+            <span class="skill-tag">PCA 主成分分析</span>
+            <span class="skill-tag">DID 双重差分</span>
+            <span class="skill-tag">回归分析</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-icon">📚</div>
+          <div class="skill-cat-title">专业领域知识</div>
+          <div class="skill-list">
+            <span class="skill-tag">计量经济学</span>
+            <span class="skill-tag">金融学</span>
+            <span class="skill-tag">资产定价</span>
+            <span class="skill-tag">行为金融</span>
+            <span class="skill-tag">市场微结构</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <div class="skill-cat-icon">🌐</div>
+          <div class="skill-cat-title">语言能力</div>
+          <div class="skill-list">
+            <span class="skill-tag">中文（母语）</span>
+            <span class="skill-tag">英语（IELTS 7.0）</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Projects ===== -->
+  <section id="projects">
+    <div class="projects-wrapper">
+      <!-- 固定在顶部的标题栏 -->
+      <div class="projects-header-panel">
+        <div class="section-label">Projects</div>
+        <h2 class="section-title">项目经历</h2>
+        <p class="section-desc">参与或主导的核心项目。</p>
+        <!-- 进度指示器 -->
+        <div class="projects-progress-bar">
+          <div class="progress-dot active" data-index="0"></div>
+          <div class="progress-dot" data-index="1"></div>
+          <div class="progress-dot" data-index="2"></div>
+        </div>
+      </div>
+
+      <!-- 横向滚动的卡片轨道 -->
+      <div class="projects-track" id="projectsTrack">
+
+        <div class="project-card">
+          <div class="card-inner">
+            <div class="project-icon">🔬</div>
+            <div class="project-title">注册制改革对A股股价崩盘风险的影响研究</div>
+            <div class="project-desc">
+              基于 5229 只 A 股、2019—2023 年面板数据，采用 Pooled OLS + 聚类稳健标准误
+              研究注册制改革对股价崩盘风险（NCSKEW / DUVOL）的影响；通过 PCA 构建情绪指数，
+              发现高情绪显著降低崩盘风险，注册制改革对科创板有显著正向影响，效应集中于大盘股。
+            </div>
+            <div class="project-tags">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">Stata</span>
+              <span class="project-tag">DID</span>
+              <span class="project-tag">面板数据</span>
+              <span class="project-tag">PCA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-inner">
+            <div class="project-icon">📈</div>
+            <div class="project-title">KPRO 品牌市场调研分析</div>
+            <div class="project-desc">
+              负责 KPRO 品牌消费者调研的数据收集与分析，包括问卷设计、数据清洗、
+              描述性统计与可视化输出，形成品牌认知度与竞争格局分析报告。
+            </div>
+            <div class="project-tags">
+              <span class="project-tag">市场调研</span>
+              <span class="project-tag">数据分析</span>
+              <span class="project-tag">Python</span>
+              <span class="project-tag">可视化</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="card-inner">
+            <div class="project-icon">💡</div>
+            <div class="project-title">NUS课程项目：机器学习模型对比分析</div>
+            <div class="project-desc">
+              在 NUS 系统分析课程中，对比了 Random Forest、XGBoost 与 Logistic Regression 在分类任务上的表现，
+              通过交叉验证与网格搜索优化超参数，最终 XGBoost 准确率达到 92.3%，相比基准模型提升约 8 个百分点。
+            </div>
+            <div class="project-tags">
+              <span class="project-tag">Python</span>
+              <span class="project-tag">机器学习</span>
+              <span class="project-tag">scikit-learn</span>
+              <span class="project-tag">数据分析</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="projects-exit-hint" id="projectsExitHint">← 继续往下滑进入下一个板块 →</div>
+  </section>
+
+  <!-- ===== Research / Publications ===== -->
+  <section id="research">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-label">Research</div>
+        <h2 class="section-title">学术研究 & 成果</h2>
+        <p class="section-desc">论文发表、工作论文及学术贡献。</p>
+      </div>
+      <div class="pub-list fade-in">
+
+        <div class="pub-card">
+          <div class="pub-title">《注册制改革对A股股价崩盘风险的影响——基于市场情绪的实证研究》（硕士毕业论文）</div>
+          <div class="pub-authors">陈梓熙（独立作者） · 指导教师：吴导师</div>
+          <span class="pub-venue">NUS ISS 硕士毕业论文 · 2027（进行中）</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Awards ===== -->
+  <section id="awards">
+    <div class="container">
+      <div class="fade-in">
+        <div class="section-label">Awards</div>
+        <h2 class="section-title">荣誉奖项</h2>
+        <p class="section-desc">学习、竞赛与综合素质方面的认可。</p>
+      </div>
+      <div class="awards-grid fade-in">
+
+        <div class="award-card">
+          <div class="award-emoji">🏆</div>
+          <div>
+            <div class="award-name">NUS 国际学生奖学金</div>
+            <div class="award-org">新加坡国立大学</div>
+            <span class="award-year">2026</span>
+          </div>
+        </div>
+
+        <div class="award-card">
+          <div class="award-emoji">🥈</div>
+          <div>
+            <div class="award-name">数据分析大赛二等奖</div>
+            <div class="award-org">某高校数据分析竞赛组委会</div>
+            <span class="award-year">2025</span>
+          </div>
+        </div>
+
+        <div class="award-card">
+          <div class="award-emoji">🎓</div>
+          <div>
+            <div class="award-name">优秀毕业生</div>
+            <div class="award-org">某大学 · 某学院</div>
+            <span class="award-year">2026</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-card fade-in">
+        <div class="contact-title">一起创造价值 ✨</div>
+        <div class="contact-subtitle">
+          如果你有合适的机会，或者只是想聊聊，欢迎随时联系我。
+        </div>
+        <div class="contact-links">
+          <a href="mailto:2287070405a@gmail.com" class="contact-btn contact-btn-primary">
+            ✉️ 发送邮件
+          </a>
+          <a href="tel:+86-13510072314" class="contact-btn contact-btn-secondary">
+            📱 拨打电话
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <p>© 2026 陈梓熙 · 用 ❤️ 手工打造 · <a href="mailto:2287070405a@gmail.com">2287070405a@gmail.com</a></p>
+  </footer>
+
+  <!-- ===== Intersection Observer (Fade-in) ===== -->
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+    // =====================================================
+    // 导航栏 JS: 毛玻璃加深 + 滚动高亮 + 汉堡菜单切换
+    // =====================================================
+
+    const nav = document.querySelector('nav');
+    const hamburger = document.querySelector('.nav-hamburger');
+    const navLinks = document.querySelector('.nav-links');
+    const navLinkItems = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section[id]');
+
+    // 1. 滚动时加深毛玻璃效果
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // 2. 汉堡按钮切换移动端菜单
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('mobile-open');
+      hamburger.classList.toggle('open', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? '关闭菜单' : '打开菜单');
+    });
+
+    // 3. 点击导航链接 → 关闭移动端菜单 + 高亮当前 section
+    navLinkItems.forEach((link) => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('mobile-open');
+        hamburger.classList.remove('open');
+        hamburger.setAttribute('aria-label', '打开菜单');
+      });
+    });
+
+    // 4. IntersectionObserver: 根据可见 section 自动切换 active 类
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinkItems.forEach((link) => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-50% 0px -50% 0px' });
+
+    sections.forEach((s) => navObserver.observe(s));
+
+    // =====================================================
+    // Projects 横向滚动交互（GSAP ScrollTrigger 版）
+    // =====================================================
+    (() => {
+      const section = document.getElementById('projects');
+      const wrapper = section?.querySelector('.projects-wrapper');
+      const track = section?.querySelector('.projects-track');
+      const dots = section?.querySelectorAll('.progress-dot');
+      const exitHint = section?.querySelector('.projects-exit-hint');
+      const headerPanel = section?.querySelector('.projects-header-panel');
+
+      if (!section || !wrapper || !track) return;
+
+      const CARD_COUNT = 3;
+      const CARD_WIDTH = () => window.innerWidth;
+
+      // 注册 ScrollTrigger
+      gsap.registerPlugin(ScrollTrigger);
+
+      // 计算需要滚动的总距离
+      const getTotalDistance = () => track.scrollWidth - window.innerWidth;
+
+      // 初始化 track 位置
+      gsap.set(track, { x: 0 });
+
+      // 更新进度点
+      function updateDots(index) {
+        if (!dots) return;
+        dots.forEach((dot, i) => {
+          dot.classList.remove('done', 'active');
+          if (i < index) dot.classList.add('done');
+          if (i === index) dot.classList.add('active');
+        });
+        if (exitHint) {
+          if (index === CARD_COUNT - 1) {
+            exitHint.classList.add('show');
+          } else {
+            exitHint.classList.remove('show');
+          }
+        }
+      }
+
+      // 主时间线：固定 + 横向滚动
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => '+=' + (getTotalDistance() + window.innerHeight * 0.3),
+          scrub: 1,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            // 根据滚动进度计算当前卡片索引
+            const progress = self.progress;
+            const cardIndex = Math.round(progress * (CARD_COUNT - 1));
+            updateDots(cardIndex);
+          }
+        }
+      });
+
+      // 横向滚动动画
+      tl.to(track, {
+        x: () => -getTotalDistance(),
+        ease: 'none'
+      });
+
+      // 移动端禁用固定效果，改为普通垂直布局
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) {
+        tl.kill();
+        ScrollTrigger.getAll().forEach(st => st.kill());
+        // 移动端恢复普通滚动
+        section.style.height = 'auto';
+        section.style.overflow = 'visible';
+        wrapper.style.height = 'auto';
+        wrapper.style.overflow = 'visible';
+        track.style.overflowX = 'auto';
+        track.style.height = 'auto';
+        track.style.display = 'grid';
+        track.style.gridTemplateColumns = 'repeat(auto-fit, minmax(300px, 1fr))';
+        track.style.gap = '24px';
+        track.style.padding = '0 20px';
+        track.querySelectorAll('.project-card').forEach(card => {
+          card.style.width = 'auto';
+          card.style.height = 'auto';
+          card.style.flexShrink = '1';
+          card.style.border = '1px solid var(--border)';
+        });
+      }
+    })();
+
+    // fade-in observer 已经在前面定义并使用
+  </script>
+
+</body>
+</html>
